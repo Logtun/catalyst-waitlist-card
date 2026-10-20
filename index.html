@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Catalyst Waitlist Hype Card</title>
+<meta name="description" content="Make your personalised “I’m on the Catalyst waitlist” card in seconds and share it on X. Made by @iamlogtun. Not an official Catalyst product.">
+<meta name="theme-color" content="#0e0e0e">
+<meta property="og:type" content="website">
+<meta property="og:title" content="I’m on the Catalyst waitlist. Make your hype card">
+<meta property="og:description" content="Your name, your belief, your card. Generate a shareable Catalyst waitlist card for X in seconds.">
+<meta property="og:image" content="og.jpg?v=5">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
+<meta property="og:image:alt" content="A sample Catalyst waitlist hype card">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="I’m on the Catalyst waitlist. Make your hype card">
+<meta name="twitter:description" content="Your name, your belief, your card. Generate a shareable Catalyst waitlist card for X in seconds.">
+<meta name="twitter:image" content="og.jpg?v=5">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-96.png" sizes="96x96" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://api.fxtwitter.com" crossorigin>
+<link rel="preconnect" href="https://pbs.twimg.com" crossorigin>
+<link rel="preload" href="assets/bdo-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css?v=14">
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<header class="top">
+  <a class="brand" href="https://catalyst.app/" target="_blank" rel="noopener" aria-label="Catalyst">
+    <img src="assets/catalyst-mark.svg" alt="" width="30" height="30">
+    <img src="assets/catalyst-word.svg" alt="Catalyst" class="word" height="25">
+  </a>
+  <span class="tag">Hype Card</span>
+  <a class="btn btn-ghost btn-sm join-top" href="https://catalyst.app/" target="_blank" rel="noopener">Join the waitlist</a>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <h1>Show the timeline you’re <span class="accent">early</span>.</h1>
+    <p>Make your “I’m on the Catalyst waitlist” card, then post it on X.</p>
+    <a class="believers" id="believersCount" href="#believers" hidden aria-live="polite"></a>
+  </section>
+
+  <section class="preview" aria-label="Card preview">
+    <div class="canvas-frame">
+      <canvas id="card" width="1200" height="675" role="img" aria-label="Your Catalyst waitlist card"></canvas>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" id="btnDownload" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 19h16"/></svg>
+        Download PNG
+      </button>
+      <button class="btn btn-x" id="btnShareX" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="fill"><path d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3zm-1.08 16.17h1.7L7.4 4.73H5.58l11.09 14.44z"/></svg>
+        Share on X
+      </button>
+      <button class="btn btn-ghost" id="btnCopy" type="button" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>
+        Copy image
+      </button>
+    </div>
+    <label class="wall-opt" id="wallOpt" hidden><input type="checkbox" id="showOnWall" checked> <span>Show my card on the Believers wall</span></label>
+    <p class="hint">On your phone, <strong>Share on X</strong> opens your share sheet with the card attached: just pick X. On a computer it saves the card so you can attach it.</p>
+  </section>
+
+  <section class="form" aria-label="Customise your card">
+    <div class="field">
+      <label for="handle">X handle</label>
+      <div class="input-prefix"><span>@</span><input id="handle" name="x_handle" type="text" maxlength="16" placeholder="iamlogtun" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="text" enterkeyhint="done"></div>
+      <div class="xlookup" id="xLookup" aria-live="polite" data-state="idle">
+        <span class="xl-av" id="xlAv" aria-hidden="true"></span>
+        <span class="xl-text small" id="xlText">Enter your handle and we’ll pull your X name and photo.</span>
+      </div>
+    </div>
+    <div class="field">
+      <label for="belief">What I believe <em>optional</em></label>
+      <div class="belief-row">
+        <input id="belief" type="text" maxlength="90" placeholder="ETH flips BTC by 2027">
+        <button class="btn btn-ghost btn-icon" id="btnRandom" type="button" title="Random belief" aria-label="Random belief">🎲</button>
+      </div>
+      <span class="muted small">Tap 🎲 for a random belief. Not financial advice, obviously.</span>
+    </div>
+  </section>
+
+  <section class="wall-sec" id="believers" aria-labelledby="wallTitle" hidden>
+    <div class="wall-head">
+      <h2 id="wallTitle">Believers wall</h2>
+      <span class="muted small">Latest cards, newest first</span>
+    </div>
+    <div class="wall" id="wall"></div>
+    <p class="wall-empty muted" id="wallEmpty" hidden>No cards yet. Make yours and be the first on the wall.</p>
+  </section>
+
+  <section class="cta">
+    <h2>Not on the waitlist yet?</h2>
+    <p>Tell Catalyst what you believe. It researches your idea, builds a strategy, monitors events and executes trades for you. Access opens in batches.</p>
+    <a class="btn btn-primary btn-lg" href="https://catalyst.app/" target="_blank" rel="noopener">Join the waitlist →</a>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>made by <a href="https://x.com/iamlogtun" target="_blank" rel="noopener">@iamlogtun</a> · not an official Catalyst product</p>
+</footer>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-x" id="modalClose" type="button" aria-label="Close">×</button>
+    <h3 id="modalTitle">Save your card</h3>
+    <p class="muted" id="modalSteps">Press and hold the image, then tap <strong>Save to Photos</strong>.</p>
+    <img id="modalImg" alt="Your Catalyst waitlist card">
+    <a class="btn btn-x modal-openx" id="modalOpenX" href="https://x.com/intent/tweet" target="_blank" rel="noopener" hidden>Open X →</a>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="wall.js?v=1" defer></script>
+<script src="app.js?v=15" defer></script>
+</body>
+</html>
