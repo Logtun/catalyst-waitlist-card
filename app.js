@@ -3,7 +3,7 @@
 const W = 1200, H = 675;
 const APP_URL = location.origin + "/"; // this site's own address, wherever it is deployed
 const SHARE_LINK = "catalyst.app"; // the single link in the post; set to APP_URL to link the hype site instead
-const X_HANDLE = "@catalystlabsx"; // from catalyst.app's own links and twitter:creator tag
+const X_HANDLE = "@catalystapp"; // from catalyst.app's own links and twitter:creator tag
 
 const BELIEFS = [
   "ETH flips BTC by 2027",
