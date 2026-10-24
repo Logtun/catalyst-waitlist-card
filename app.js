@@ -449,10 +449,13 @@ function fileName() {
   return `catalyst-waitlist${h ? "-" + h : ""}.png`;
 }
 function getBlob() { draw(); return new Promise((res) => canvas.toBlob((b) => res(b), "image/png")); }
+// Their own invite link when they unlocked with it and kept "Add my invite link" on (gate.js).
+function joinLink() { const g = window.__gate; return (g && g.shareLink && g.shareLink()) || SHARE_LINK; }
+const gateOk = () => !!(window.__gate && window.__gate.ok());
 function shareText() {
   const b = els.belief.value.trim();
   const belief = b ? `\n\nWhat I believe: "${b.length > 100 ? b.slice(0, 99) + "…" : b}"` : "";
-  return `I have joined the ${X_HANDLE} waitlist 🧡\n\nCatalyst is an AI powered financial intelligence and trading platform.\n\nTell it what you believe, it researches, builds the strategy and trades it for you.${belief}\n\nJoin us —> ${SHARE_LINK}\n\nCreate your card —> ${location.origin}`;
+  return `I have joined the ${X_HANDLE} waitlist 🧡\n\nCatalyst is an AI powered financial intelligence and trading platform.\n\nTell it what you believe, it researches, builds the strategy and trades it for you.${belief}\n\nJoin us —> ${joinLink()}\n\nCreate your card —> ${location.origin}`;
 }
 const isIOS = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 const isInApp = /FBAN|FBAV|Instagram|Line\/|WhatsApp|Twitter|; wv\)/i.test(navigator.userAgent);
@@ -468,6 +471,7 @@ function showModal(url, withX) {
   $("modal").hidden = false;
 }
 $("btnDownload").addEventListener("click", async () => {
+  if (!gateOk()) return toast("Join the waitlist and paste your invite link to unlock your card.");
   const blob = await getBlob();
   if (!blob) return toast("Something went wrong. Try again.");
   if (lastUrl) URL.revokeObjectURL(lastUrl);
@@ -549,6 +553,7 @@ function fallbackShare(blob) {
 }
 
 $("btnShareX").addEventListener("click", () => {
+  if (!gateOk()) return toast("Join the waitlist and paste your invite link to unlock your card.");
   const file = currentFile();
   shareDbg.text = shareText();
   if (canShareFiles) {
@@ -566,6 +571,7 @@ $("btnShareX").addEventListener("click", () => {
   if (!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) || isIOS) return;
   const btn = $("btnCopy"); btn.hidden = false;
   btn.addEventListener("click", async () => {
+    if (!gateOk()) return;
     try {
       await navigator.clipboard.write([new ClipboardItem({ "image/png": getBlob() })]);
       toast("Copied! Paste it straight into your post.");

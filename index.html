@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://api.fxtwitter.com" crossorigin>
 <link rel="preconnect" href="https://pbs.twimg.com" crossorigin>
 <link rel="preload" href="assets/bdo-grotesk.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=14">
+<link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
 <div class="bg-grid" aria-hidden="true"></div>
@@ -44,9 +44,50 @@
     <a class="believers" id="believersCount" href="#believers" hidden aria-live="polite"></a>
   </section>
 
+  <section class="gate" id="gate" aria-labelledby="gateTitle" data-state="locked">
+    <div id="gateSteps">
+      <div class="gate-head">
+        <span class="gate-ico" aria-hidden="true">🔒</span>
+        <div>
+          <h2 id="gateTitle">For waitlist members only</h2>
+          <p class="muted small">Join the Catalyst waitlist first, then unlock your card with your invite link.</p>
+        </div>
+      </div>
+      <ol class="gate-steps">
+        <li class="gate-step">
+          <span class="gate-num" aria-hidden="true">1</span>
+          <div class="gate-body">
+            <b>Join the Catalyst waitlist</b>
+            <span class="muted small">Sign up at catalyst.app. It takes a minute.</span>
+            <a class="btn btn-ghost btn-sm gate-join" id="gateJoin" href="https://catalyst.app/" target="_blank" rel="noopener">Join the Catalyst waitlist ↗</a>
+          </div>
+        </li>
+        <li class="gate-step">
+          <span class="gate-num" aria-hidden="true">2</span>
+          <div class="gate-body">
+            <label for="invite"><b>Paste your Catalyst invite link</b></label>
+            <span class="muted small">You get it after joining, under “Invite a friend”.</span>
+            <input id="invite" type="text" inputmode="url" placeholder="catalyst.app/?r=AbC12" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-describedby="inviteMsg">
+            <p class="gate-msg" id="inviteMsg" aria-live="polite"></p>
+            <button class="btn btn-primary" id="btnUnlock" type="button" disabled>Unlock my card</button>
+          </div>
+        </li>
+      </ol>
+    </div>
+    <div class="gate-done" id="gateDone" hidden>
+      <span>Joined ✓ · invite code <b id="gateCode"></b></span>
+      <button class="gate-change" id="gateChange" type="button">Change</button>
+    </div>
+  </section>
+
   <section class="preview" aria-label="Card preview">
     <div class="canvas-frame">
       <canvas id="card" width="1200" height="675" role="img" aria-label="Your Catalyst waitlist card"></canvas>
+      <div class="lock-overlay" aria-hidden="false">
+        <span class="lock-ico" aria-hidden="true">🔒</span>
+        <b>Join the waitlist to unlock your card</b>
+        <button class="btn btn-ghost btn-sm" id="lockGo" type="button">Unlock with your invite link ↑</button>
+      </div>
     </div>
     <div class="actions">
       <button class="btn btn-primary" id="btnDownload" type="button">
@@ -63,6 +104,7 @@
       </button>
     </div>
     <label class="wall-opt" id="wallOpt" hidden><input type="checkbox" id="showOnWall" checked> <span>Show my card on the Believers wall</span></label>
+    <label class="wall-opt ref-opt" id="refOpt" hidden><input type="checkbox" id="addRef" checked> <span>Add my invite link to the post, so friends join through it</span></label>
     <p class="hint">On your phone, <strong>Share on X</strong> opens your share sheet with the card attached: just pick X. On a computer it saves the card so you can attach it.</p>
   </section>
 
@@ -117,6 +159,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="wall.js?v=1" defer></script>
-<script src="app.js?v=15" defer></script>
+<script src="app.js?v=16" defer></script>
+<script src="gate.js?v=1" defer></script>
 </body>
 </html>
