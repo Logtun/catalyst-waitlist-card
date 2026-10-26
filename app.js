@@ -308,12 +308,6 @@ function draw() {
   });
   ctx.lineCap = "butt"; ctx.lineJoin = "miter";
 
-  // credit: centred just below the box
-  ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
-  ctx.font = F(500, 16); setLS(0.3); ctx.fillStyle = "rgba(255,255,255,0.42)";
-  ctx.fillText("designed by @iamlogtun · not official", cx + cw / 2, cy + ch + 34);
-  setLS(0);
-
   // bottom strip
   ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
   ctx.font = F(700, 22); ctx.fillStyle = T.text;
@@ -321,6 +315,9 @@ function draw() {
   const cw2 = ctx.measureText("catalyst.app").width;
   ctx.font = F(500, 18); ctx.fillStyle = T.sub;
   ctx.fillText("·  access opens in batches", 64 + cw2 + 12, 625);
+  // credit: same line as the strip, right-aligned to the box's right edge
+  ctx.textAlign = "right";
+  ctx.fillText("designed by @iamlogtun · not official", cx + cw, 625);
   ctx.restore();
 }
 function hexA(c, a) {
