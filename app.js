@@ -200,7 +200,7 @@ function draw() {
   ctx.fillText("@" + handle, 223, acy + 36);
 
   // belief / strategy card
-  const cx = 660, cy = 122, cw = 476, ch = 456;
+  const cx = 660, cy = 132, cw = 476, ch = 422;
   ctx.save();
   ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 40; ctx.shadowOffsetY = 16;
   rr(cx, cy, cw, ch, 28); ctx.fillStyle = "rgba(18,18,18,0.92)"; ctx.fill();
@@ -303,10 +303,10 @@ function draw() {
   });
   ctx.lineCap = "butt"; ctx.lineJoin = "miter";
 
-  // credit: centred at the bottom inside the box
+  // credit: centred just below the box
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
   ctx.font = F(500, 16); setLS(0.3); ctx.fillStyle = "rgba(255,255,255,0.42)";
-  ctx.fillText("design by @iamlogtun · not official", cx + cw / 2, cy + ch - 24);
+  ctx.fillText("design by @iamlogtun · not official", cx + cw / 2, cy + ch + 34);
   setLS(0);
 
   // bottom strip
