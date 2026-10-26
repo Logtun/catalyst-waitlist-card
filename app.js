@@ -155,29 +155,6 @@ function draw() {
   if (assets.mark) ctx.drawImage(assets.mark, 64, 52, 56, 56);
   if (assets.word) { const wh = 43, ww = wh * assets.word.width / assets.word.height; ctx.drawImage(assets.word, 132, 62, ww, wh); }
 
-  // badges (top right)
-  let bx = W - 64;
-  ctx.textBaseline = "middle";
-  const pill = (txt, filled, icon) => {
-    ctx.font = F(700, 17); setLS(1.6);
-    const tw = ctx.measureText(txt).width, pw = tw + (icon ? 62 : 40), ph = 44;
-    const x = bx - pw, y = 58;
-    rr(x, y, pw, ph, 22);
-    if (filled) { ctx.fillStyle = T.accent; ctx.fill(); }
-    else { ctx.fillStyle = "rgba(255,255,255,0.06)"; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = T.cardLine; ctx.stroke(); }
-    ctx.fillStyle = filled ? T.onAccent : T.text;
-    let tx = x + 20;
-    if (icon) {
-      // little hexagon icon
-      hexPath(x + 30, y + ph / 2, 10); ctx.fillStyle = filled ? T.onAccent : T.accent; ctx.fill();
-      ctx.fillStyle = filled ? T.onAccent : T.text; tx = x + 50;
-    }
-    ctx.textAlign = "left"; ctx.fillText(txt, tx, y + ph / 2 + 1);
-    setLS(0);
-    bx = x - 12;
-  };
-  pill("EARLY BELIEVER", true, true);
-
   // headline
   ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
   ctx.fillStyle = T.text;
@@ -223,7 +200,7 @@ function draw() {
   ctx.fillText("@" + handle, 223, acy + 36);
 
   // belief / strategy card
-  const cx = 660, cy = 136, cw = 476, ch = 422;
+  const cx = 660, cy = 122, cw = 476, ch = 456;
   ctx.save();
   ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 40; ctx.shadowOffsetY = 16;
   rr(cx, cy, cw, ch, 28); ctx.fillStyle = "rgba(18,18,18,0.92)"; ctx.fill();
@@ -239,6 +216,19 @@ function draw() {
   ctx.fillStyle = cg; ctx.fillRect(cx, cy, cw, ch);
   ctx.restore();
 
+
+  // "Early believer" badge: centred on the box's top edge
+  {
+    ctx.textBaseline = "middle";
+    ctx.font = F(700, 17); setLS(1.6);
+    const txt = "EARLY BELIEVER", tw = ctx.measureText(txt).width, pw = tw + 62, ph = 44;
+    const x = cx + (cw - pw) / 2, y = cy - ph / 2;
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.45)"; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
+    rr(x, y, pw, ph, 22); ctx.fillStyle = T.accent; ctx.fill(); ctx.restore();
+    hexPath(x + 30, y + ph / 2, 10); ctx.fillStyle = T.onAccent; ctx.fill();
+    ctx.fillStyle = T.onAccent; ctx.textAlign = "left"; ctx.fillText(txt, x + 50, y + ph / 2 + 1);
+    setLS(0);
+  }
   // card header
   ctx.textBaseline = "middle"; ctx.textAlign = "left";
   ctx.beginPath(); ctx.arc(cx + 38, cy + 44, 6, 0, Math.PI * 2); ctx.fillStyle = cardAccent; ctx.fill();
@@ -313,6 +303,12 @@ function draw() {
   });
   ctx.lineCap = "butt"; ctx.lineJoin = "miter";
 
+  // credit: centred at the bottom inside the box
+  ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+  ctx.font = F(500, 16); setLS(0.3); ctx.fillStyle = "rgba(255,255,255,0.42)";
+  ctx.fillText("design by @iamlogtun · not official", cx + cw / 2, cy + ch - 24);
+  setLS(0);
+
   // bottom strip
   ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
   ctx.font = F(700, 22); ctx.fillStyle = T.text;
@@ -320,8 +316,6 @@ function draw() {
   const cw2 = ctx.measureText("catalyst.app").width;
   ctx.font = F(500, 18); ctx.fillStyle = T.sub;
   ctx.fillText("·  access opens in batches", 64 + cw2 + 12, 625);
-  ctx.textAlign = "right"; ctx.font = F(500, 16); ctx.fillStyle = "rgba(255,255,255,0.38)";
-  ctx.fillText("made by @iamlogtun · not official", W - 64, 625);
   ctx.restore();
 }
 function hexA(c, a) {
