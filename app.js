@@ -318,9 +318,13 @@ function draw() {
   const cw2 = ctx.measureText("catalyst.app").width;
   ctx.font = F(500, 18); ctx.fillStyle = T.sub;
   ctx.fillText("·  access opens in batches", 64 + cw2 + 12, 625);
-  // credit: same line as the strip, right-aligned to the box's right edge
-  ctx.textAlign = "right";
-  ctx.fillText("designed by @iamlogtun · not official", cx + cw, 625);
+  // credit: same line as the strip, horizontally centred on the "What I believe" box
+  const stripEnd = 64 + cw2 + 12 + ctx.measureText("·  access opens in batches").width;
+  const credit = "designed by @iamlogtun · not official";
+  const crw = ctx.measureText(credit).width;
+  const crx = Math.max(cx + cw / 2, stripEnd + 40 + crw / 2);
+  ctx.textAlign = "center";
+  ctx.fillText(credit, crx, 625);
   ctx.restore();
 }
 function hexA(c, a) {
