@@ -217,12 +217,12 @@ function draw() {
   ctx.restore();
 
 
-  // "Early believer" badge: centred on the box's top edge
+  // "Early believer" badge: centred above the box, clear of its top border
   {
     ctx.textBaseline = "middle";
     ctx.font = F(700, 17); setLS(1.6);
     const txt = "EARLY BELIEVER", tw = ctx.measureText(txt).width, pw = tw + 62, ph = 44;
-    const x = cx + (cw - pw) / 2, y = cy - ph / 2;
+    const x = cx + (cw - pw) / 2, y = cy - ph - 14;
     ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.45)"; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
     rr(x, y, pw, ph, 22); ctx.fillStyle = T.accent; ctx.fill(); ctx.restore();
     hexPath(x + 30, y + ph / 2, 10); ctx.fillStyle = T.onAccent; ctx.fill();
@@ -245,7 +245,7 @@ function draw() {
   ctx.fillText("“", cx + 18, cy + 205);
   const bt = belief || "Tell it what you believe.";
   const qx = cx + 36, qw = cw - 72, qTop = cy + 84, qBot = cy + 290;
-  let bs = 46, lines;
+  let bs = 52, lines;
   setLS(-0.8);
   for (; bs > 22; bs -= 2) {
     ctx.font = F(600, bs); lines = wrap(bt, qw);
@@ -583,7 +583,7 @@ function believe(via) {
   if (!Wall || !Wall.enabled) return;
   const handle = cleanHandle(els.handle.value);
   if (!HANDLE_RE.test(handle)) return;
-  Wall.submit({ handle, name: displayName(), avatar: state.avatarUrl || "", belief: els.belief.value.trim().slice(0, 90), via });
+  Wall.submit({ handle, name: displayName(), avatar: state.avatarUrl || "", belief: els.belief.value.trim().slice(0, 50), via });
 }
 
 let tt = 0;
