@@ -239,12 +239,17 @@ function draw() {
   ctx.fillText("STRATEGY · DRAFT", cx + cw - 32, cy + 45);
   setLS(0);
 
-  // quote: big faded quote mark behind, belief vertically centred in its block
+  // quote marks: opening “ top-left, closing ” bottom-right (mirrored), in the accent colour;
+  // the belief sits in the space between them so neither mark ever touches the text
   ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
-  ctx.font = F(700, 190); ctx.fillStyle = hexA(cardAccent, 0.16);
-  ctx.fillText("“", cx + 18, cy + 205);
+  ctx.font = F(700, 140); ctx.fillStyle = hexA(cardAccent, 0.55);
+  const mo = ctx.measureText("“"), mc = ctx.measureText("”");
+  const oL = cx + 30, oT = cy + 80, oW = mo.actualBoundingBoxLeft + mo.actualBoundingBoxRight;
+  const cR = cx + cw - 30, cB = cy + 292, cH = mc.actualBoundingBoxAscent + mc.actualBoundingBoxDescent;
+  ctx.fillText("“", oL + mo.actualBoundingBoxLeft, oT + mo.actualBoundingBoxAscent);
+  ctx.fillText("”", cR - mc.actualBoundingBoxRight, cB - mc.actualBoundingBoxDescent);
   const bt = belief || "Tell it what you believe.";
-  const qx = cx + 36, qw = cw - 72, qTop = cy + 84, qBot = cy + 290;
+  const qx = oL + oW + 20, qw = cx + cw - 36 - qx, qTop = cy + 84, qBot = cB - cH - 10;
   let bs = 52, lines;
   setLS(-0.8);
   for (; bs > 22; bs -= 2) {
