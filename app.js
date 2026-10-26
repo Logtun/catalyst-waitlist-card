@@ -311,7 +311,7 @@ function draw() {
   // credit: centred just below the box
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
   ctx.font = F(500, 16); setLS(0.3); ctx.fillStyle = "rgba(255,255,255,0.42)";
-  ctx.fillText("design by @iamlogtun · not official", cx + cw / 2, cy + ch + 34);
+  ctx.fillText("designed by @iamlogtun · not official", cx + cw / 2, cy + ch + 34);
   setLS(0);
 
   // bottom strip
