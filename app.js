@@ -217,12 +217,15 @@ function draw() {
   ctx.restore();
 
 
-  // "Early believer" badge: centred above the box, clear of its top border
+  // "Early believer" badge: on the logo row (same vertical middle as the Catalyst mark + name), centred over the box
   {
     ctx.textBaseline = "middle";
     ctx.font = F(700, 17); setLS(1.6);
     const txt = "EARLY BELIEVER", tw = ctx.measureText(txt).width, pw = tw + 62, ph = 44;
-    const x = cx + (cw - pw) / 2, y = cy - ph - 14;
+    const logoMid = 52 + 56 / 2; // Catalyst mark is drawn at y 52..108
+    const wordR = assets.word ? 132 + 43 * assets.word.width / assets.word.height : 132;
+    let x = cx + (cw - pw) / 2; if (x < wordR + 40) x = cx + cw - pw;
+    const y = logoMid - ph / 2;
     ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.45)"; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
     rr(x, y, pw, ph, 22); ctx.fillStyle = T.accent; ctx.fill(); ctx.restore();
     hexPath(x + 30, y + ph / 2, 10); ctx.fillStyle = T.onAccent; ctx.fill();
