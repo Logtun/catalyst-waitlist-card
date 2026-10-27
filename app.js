@@ -242,36 +242,78 @@ function draw() {
   ctx.fillText("STRATEGY · DRAFT", cx + cw - 32, cy + 45);
   setLS(0);
 
-  // quote marks: opening “ top-left, closing ” bottom-right (mirrored), in the accent colour;
-  // the belief sits in the space between them so neither mark ever touches the text
+  // quote marks hug the typed belief: opening “ just before the first line's start (top-aligned
+  // with its capitals), closing ” just after the last line's end; both sized from the belief font
+  // and measured from the rendered text, so they never touch the text or leave the box
   ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
-  ctx.font = F(700, 140); ctx.fillStyle = hexA(cardAccent, 0.55);
-  const mo = ctx.measureText("“"), mc = ctx.measureText("”");
-  const oL = cx + 30, oT = cy + 80, oW = mo.actualBoundingBoxLeft + mo.actualBoundingBoxRight;
-  const cR = cx + cw - 30, cB = cy + 292, cH = mc.actualBoundingBoxAscent + mc.actualBoundingBoxDescent;
-  ctx.fillText("“", oL + mo.actualBoundingBoxLeft, oT + mo.actualBoundingBoxAscent);
-  ctx.fillText("”", cR - mc.actualBoundingBoxRight, cB - mc.actualBoundingBoxDescent);
   const bt = belief || "Tell it what you believe.";
-  const qx = oL + oW + 20, qw = cx + cw - 36 - qx, qTop = cy + 84, qBot = cB - cH - 10;
-  let bs = 52, lines;
-  setLS(-0.8);
-  for (; bs > 22; bs -= 2) {
-    ctx.font = F(600, bs); lines = wrap(bt, qw);
-    if (lines.length * bs * 1.14 <= qBot - qTop && lines.every((l) => ctx.measureText(l).width <= qw)) break;
+  const padL = cx + 34, padR = cx + cw - 34, qTop = cy + 84, qBot = cy + 290;
+  let bs = 56, lines, mo, mc, ms, qg, qx, qw;
+  const markMetrics = (size) => {
+    setLS(0); ctx.font = F(700, Math.round(size * 1.9));
+    mo = ctx.measureText("“"); mc = ctx.measureText("”"); ms = Math.round(size * 1.9);
+    qg = Math.max(7, Math.round(size * 0.2));
+    qx = padL + mo.actualBoundingBoxLeft + mo.actualBoundingBoxRight + qg; qw = padR - qx;
+  };
+  const cWid = () => mc.actualBoundingBoxLeft + mc.actualBoundingBoxRight;
+  // wrap, then make room for the closing mark on the last line (push its last word down if needed)
+  const wrapQ = (t) => {
+    const L = wrap(t, qw);
+    const room = qw - qg - cWid();
+    const last = L[L.length - 1];
+    if (ctx.measureText(last).width > room) {
+      const ws = last.split(" ");
+      if (ws.length > 1) { const tail = ws.pop(); L[L.length - 1] = ws.join(" "); L.push(tail); }
+    }
+    return L;
+  };
+  const fits = (L) => L.length * bs * 1.14 <= qBot - qTop && L.every((l) => ctx.measureText(l).width <= qw) &&
+    ctx.measureText(L[L.length - 1]).width <= qw - qg - cWid();
+  // first choice: the largest size where the plain wrap already leaves room for the closing mark;
+  // only if none does, allow pushing the last word down a line
+  let push = false, found = false;
+  for (const allowPush of [false, true]) {
+    for (bs = 56; bs >= 22; bs -= 2) {
+      markMetrics(bs); setLS(-0.8); ctx.font = F(600, bs);
+      lines = allowPush ? wrapQ(bt) : wrap(bt, qw);
+      if (fits(lines)) { found = true; break; }
+    }
+    if (found) { push = allowPush; break; }
   }
-  ctx.font = F(600, bs); lines = wrap(bt, qw);
+  if (!found) bs = 22;
+  markMetrics(bs); setLS(-0.8); ctx.font = F(600, bs); lines = push || !found ? wrapQ(bt) : wrap(bt, qw);
+  // balance the lines (no one-word orphan on the last line): narrowest wrap width that keeps the
+  // same number of lines and still leaves room for the closing mark
+  if (found && !push && lines.length > 1) {
+    const n = lines.length, room = () => qw - qg - cWid();
+    let lo = qw * 0.4, hi = qw;
+    for (let k = 0; k < 14; k++) {
+      const mid = (lo + hi) / 2, L = wrap(bt, mid);
+      if (L.length === n && ctx.measureText(L[n - 1]).width <= room()) hi = mid; else lo = mid;
+    }
+    const L = wrap(bt, hi);
+    if (L.length === n && L.every((l) => ctx.measureText(l).width <= qw)) lines = L;
+  }
   const lh = bs * 1.14, maxLines = Math.floor((qBot - qTop) / lh);
   if (lines.length > maxLines) {
     lines = lines.slice(0, maxLines);
     let last = lines[maxLines - 1];
-    while (last.length > 1 && ctx.measureText(last + "…").width > qw) last = last.slice(0, -1);
+    while (last.length > 1 && ctx.measureText(last + "…").width > qw - qg - cWid()) last = last.slice(0, -1);
     lines[maxLines - 1] = last.replace(/[\s,.;:]+$/, "") + "…";
   }
   const blockH = lines.length * lh;
   const y0 = qTop + (qBot - qTop - blockH) / 2 + bs * 0.86;
+  const capH = ctx.measureText("H").actualBoundingBoxAscent;
+  const lastW = ctx.measureText(lines[lines.length - 1]).width;
   ctx.fillStyle = belief ? "#ffffff" : "rgba(255,255,255,0.55)";
   lines.forEach((l, i) => ctx.fillText(l, qx, y0 + i * lh));
-  setLS(0);
+  // the marks (no letter-spacing), top of each glyph level with the cap height of its line
+  setLS(0); ctx.font = F(700, ms); ctx.fillStyle = hexA(cardAccent, belief ? 0.8 : 0.5);
+  const firstTop = y0 - capH, lastTop = y0 + (lines.length - 1) * lh - capH;
+  ctx.fillText("“", qx - qg - mo.actualBoundingBoxRight, firstTop + mo.actualBoundingBoxAscent);
+  let cL = qx + lastW + qg;
+  ctx.fillText("”", cL + mc.actualBoundingBoxLeft, lastTop + mc.actualBoundingBoxAscent);
+  ctx.textAlign = "left";
 
   // divider
   const dy = cy + 306;
