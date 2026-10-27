@@ -502,7 +502,7 @@ const gateOk = () => !!(window.__gate && window.__gate.ok());
 function shareText() {
   const b = els.belief.value.trim();
   const belief = b ? `\n\nWhat I believe: "${b.length > 100 ? b.slice(0, 99) + "…" : b}"` : "";
-  return `I have joined the ${X_HANDLE} waitlist 🧡\n\nCatalyst is an AI powered financial intelligence and trading platform.\n\nTell it what you believe, it researches, builds the strategy and trades it for you.${belief}\n\nJoin us —> ${joinLink()}\n\nCreate your card —> ${location.origin}\n\n${QUOTE_TWEET_URL}`;
+  return `I have joined the ${X_HANDLE} waitlist 🧡\n\nTell it what you believe, it researches, builds the strategy and trades it for you.${belief}\n\nJoin us —> ${joinLink()}\n\nCreate your card —> ${location.origin}\n\n${QUOTE_TWEET_URL}`;
 }
 const isIOS = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 const isInApp = /FBAN|FBAV|Instagram|Line\/|WhatsApp|Twitter|; wv\)/i.test(navigator.userAgent);
