@@ -4,6 +4,8 @@ const W = 1200, H = 675;
 const APP_URL = location.origin + "/"; // this site's own address, wherever it is deployed
 const SHARE_LINK = "catalyst.app"; // the single link in the post; set to APP_URL to link the hype site instead
 const X_HANDLE = "@catalystapp"; // from catalyst.app's own links and twitter:creator tag
+// Every shared post quotes this tweet: X renders a status URL on the last line as the quoted tweet.
+const QUOTE_TWEET_URL = "https://x.com/iamlogtun/status/2114958822880010520";
 
 const BELIEFS = [
   "ETH flips BTC by 2027",
@@ -500,7 +502,7 @@ const gateOk = () => !!(window.__gate && window.__gate.ok());
 function shareText() {
   const b = els.belief.value.trim();
   const belief = b ? `\n\nWhat I believe: "${b.length > 100 ? b.slice(0, 99) + "…" : b}"` : "";
-  return `I have joined the ${X_HANDLE} waitlist 🧡\n\nCatalyst is an AI powered financial intelligence and trading platform.\n\nTell it what you believe, it researches, builds the strategy and trades it for you.${belief}\n\nJoin us —> ${joinLink()}\n\nCreate your card —> ${location.origin}`;
+  return `I have joined the ${X_HANDLE} waitlist 🧡\n\nCatalyst is an AI powered financial intelligence and trading platform.\n\nTell it what you believe, it researches, builds the strategy and trades it for you.${belief}\n\nJoin us —> ${joinLink()}\n\nCreate your card —> ${location.origin}\n\n${QUOTE_TWEET_URL}`;
 }
 const isIOS = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 const isInApp = /FBAN|FBAV|Instagram|Line\/|WhatsApp|Twitter|; wv\)/i.test(navigator.userAgent);
